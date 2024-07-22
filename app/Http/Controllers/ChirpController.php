@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Chirp;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response; // import statement that allows you to access the Response class within your Laravel application without needing to use the fully qualified namespace each time I wanna reference it.
 
 class ChirpController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        // testing the route, the output can be seen when redirect to http://chirper.test/chirps.
+        return response('Hello, I wanna learn Laravel!');
     }
 
     /**
