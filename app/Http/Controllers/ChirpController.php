@@ -17,7 +17,10 @@ class ChirpController extends Controller
     public function index(): View
     {
         // redirect the user to the chirps.index view
-        return view('chirps.index');
+        // retrieving the latest chirps from the database to every user on the index page
+        return view('chirps.index', [
+            'chirps' => Chirp::with('user')->latest()->get(),
+        ]);
     }
 
     /**
