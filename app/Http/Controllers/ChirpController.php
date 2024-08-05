@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse; // import class is responsible for generat
 use Illuminate\Foundation\Exceptions\RegisterErrorViewPaths;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response; // import statement that allows you to access the Response class within your Laravel application without needing to use the fully qualified namespace each time I wanna reference it.
+use Illuminate\Support\Facades\Gate; // import statement that is used to manage authorization; refer tohttps://laravel.com/docs/11.x/authorization#via-the-gate-facade
 use  Illuminate\View\View; // import statement that is used to manage and render views.
 
 class ChirpController extends Controller
@@ -57,17 +58,29 @@ class ChirpController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Chirp $chirp)
+    public function edit(Chirp $chirp): View
     {
-        //
+        // check if the user is authorized to edit the Chirp
+        Gate::authorize('update', $chirp);
+        // return the edit view if the user is authorized
+        return view('chirps.edit', [
+            'chirp' => $chirp,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Chirp $chirp)
+    public function update(Request $request, Chirp $chirp): RedirectResponse
     {
-        //
+        // check if the user is authorized to edit the Chirp
+        Gate::authorize('update', $chirp);
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+        $chirp->update($validated);
+        // return the reditect response to send users back to the chirps.index route.
+        return redirect(route('chirps.index'));
     }
 
     /**
