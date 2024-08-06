@@ -49,7 +49,8 @@ class ChirpPolicy
      */
     public function delete(User $user, Chirp $chirp): bool
     {
-        //
+        // check if the user is the author of the Chirp
+        return $this->update($user, $chirp);
     }
 
     /**
